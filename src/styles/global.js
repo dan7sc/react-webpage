@@ -6,11 +6,12 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     border: 0;
-    outline: revert;
+    font-family: 'Open Sans';
   }
   
   body {
     background-color: #1E192C;
     color: #FFFFFF;
+    font-family: 'Open Sans';
   }
 `
