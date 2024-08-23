@@ -6,6 +6,7 @@ import { object, string } from 'yup'
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
+import { api } from '../../services/api';
 
 import { Container, Title, Column, TitleLogin, SubtitleLogin, ForgotText, CreateText, Row, Wrapper } from './styles';
 
@@ -23,13 +24,23 @@ const Login = () => {
         mode: 'onChange',
     });
 
-    const onSubmit = data => {
-        console.log(data);
+    const onSubmit = async (formData) => {
+        try {
+            const { data } = await api.get(`/users?email=${formData.email}&password=${formData.password}`);
+
+            if (data.length === 1 && data[0].id) {
+                navigate('/feed');
+                return;
+            }
+
+            alert('Usuário ou senha inválido');
+            return;
+        } catch (e) {
+            console.log(e);
+            alert('Erro no servidor. Tentar novamente.');
+        }
     }
 
-    const handleClickSignIn = () => {
-        navigate('/feed')
-    }
     return (<>
         <Header />
         <Container>
@@ -55,7 +66,7 @@ const Login = () => {
                             value={control.password}
                             control={control}
                             errorMessage={errors?.password?.message} />
-                        <Button title="Entrar" variant="secondary" type="submit" onClick={handleClickSignIn} />
+                        <Button title="Entrar" variant="secondary" type="submit" onClick={handleSubmit(onSubmit)} />
                     </form>
                     <Row>
                         <ForgotText>Esqueci minha senha</ForgotText>
