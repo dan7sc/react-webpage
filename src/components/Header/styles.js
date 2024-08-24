@@ -79,3 +79,6 @@ export const Input = styled.input`
     border: 0;
     color: #FFFFFF;
 `
+export const SpaceBetween = styled.span`
+    margin-left: ${props => `${props.size}px`};
+`

@@ -1,4 +1,4 @@
-import { MdEmail, MdLock } from 'react-icons/md'
+import { MdEmail, MdLock, MdPerson2 } from 'react-icons/md'
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,14 +8,15 @@ import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
 import { api } from '../../services/api';
 
-import { Container, Title, Column, TitleLogin, SubtitleLogin, ForgotText, CreateText, Row, Wrapper } from './styles';
+import { Container, Title, Column, TitleLogin, SubtitleLogin, Row, Wrapper, TermsOfUseWarningText, HaveAccountText, DoLoginText } from './styles';
 
 const schema = object({
+    name: string().min(3, 'Minimo de 3 caracteres.').required('Campo obrigatório.'),
     email: string().email('Email inválido.').required('Campo obrigatório.'),
     password: string().min(3, 'Minimo de 3 caracteres.').required('Campo obrigatório.'),
 }).required();
 
-const Login = () => {
+const SignUp = () => {
 
     const navigate = useNavigate();
 
@@ -26,24 +27,30 @@ const Login = () => {
 
     const onSubmit = async (formData) => {
         try {
-            const { data } = await api.get(`/users?email=${formData.email}&password=${formData.password}`);
+            const { data } = await api.post('/users', {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-            if (data.length === 1 && data[0].id) {
-                navigate('/feed');
+            if (data.id && data.email) {
+                navigate('/login');
                 return;
             }
 
-            alert('Usuário ou senha inválido');
-            return;
+            alert('Ops, houve erro. Tentar novamente.');
         } catch (e) {
             console.log(e);
             alert('Erro no servidor. Tentar novamente.');
         }
     }
 
-    const handleSignUp = () => {
-        console.log('signup');
-        navigate('/signup');
+    const handleDoLogin = () => {
+        navigate('/login');
     }
 
     return (<>
@@ -55,9 +62,15 @@ const Login = () => {
             </Column>
             <Column>
                 <Wrapper>
-                    <TitleLogin>Faça seu cadastro</TitleLogin>
-                    <SubtitleLogin>Faça seu login e make the change._</SubtitleLogin>
+                    <TitleLogin>Comece agora grátis</TitleLogin>
+                    <SubtitleLogin>Cria sua conta e make the change._</SubtitleLogin>
                     <form onSubmit={handleSubmit(onSubmit)} >
+                        <Input placeholder="Nome completo"
+                            leftIcon={<MdPerson2 />}
+                            name="name"
+                            value={control.name}
+                            control={control}
+                            errorMessage={errors?.name?.message} />
                         <Input placeholder="E-mail"
                             leftIcon={<MdEmail />}
                             name="email"
@@ -71,11 +84,16 @@ const Login = () => {
                             value={control.password}
                             control={control}
                             errorMessage={errors?.password?.message} />
-                        <Button title="Entrar" variant="secondary" type="submit" />
+                        <Button title="Criar minha conta" variant="secondary" type="submit" />
                     </form>
                     <Row>
-                        <ForgotText>Esqueci minha senha</ForgotText>
-                        <CreateText onClick={handleSignUp}>Criar Conta</CreateText>
+                        <TermsOfUseWarningText>Ao clicar em "criar minha conta grátis", declaro que aceito as Políticas de Privacidade e os Termos de Uso.</TermsOfUseWarningText>
+                    </Row>
+                    <Row>
+                        <HaveAccountText>
+                            Já tenho conta.
+                            <DoLoginText onClick={handleDoLogin}> Fazer login</DoLoginText>
+                        </HaveAccountText>
                     </Row>
                 </Wrapper>
             </Column>
@@ -83,4 +101,4 @@ const Login = () => {
     </>)
 }
 
-export { Login }
+export { SignUp }

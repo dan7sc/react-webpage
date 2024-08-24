@@ -3,7 +3,7 @@ import logo from '../../assets/logo-dio.png';
 
 import { Button } from '../Button';
 
-import { Container, Wrapper, SearchInputContainer, Input, Row, Menu, MenuRight, UserPicture } from './styles';
+import { Container, Wrapper, SearchInputContainer, Input, Row, Menu, MenuRight, UserPicture, SpaceBetween } from './styles';
 
 const Header = ({ authenticated }) => {
     return (
@@ -28,6 +28,7 @@ const Header = ({ authenticated }) => {
                         <>
                             <MenuRight href="/">Home</MenuRight>
                             <Button title="Sign In" />
+                            <SpaceBetween size='10' />
                             <Button title="Sign Up" />
                         </>
                     )}

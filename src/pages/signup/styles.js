@@ -58,18 +58,26 @@ export const SubtitleLogin = styled.p`
     margin-bottom: 35px;
 `
 
+export const TermsOfUseWarningText = styled.p`
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    margin-top: 8px;
+`
 
-export const ForgotText = styled.p`
+export const HaveAccountText = styled.p`
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
     line-height: 19px;
 
-    color: #E5E044;
+    color: #FFFFFF;
 `
 
-export const CreateText = styled.p`
+export const DoLoginText = styled.span`
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 700;
